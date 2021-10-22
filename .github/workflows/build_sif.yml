@@ -1,0 +1,35 @@
+name: Build SIF
+on: push
+
+jobs:
+  build_sif:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get -qqy update
+          sudo apt-get -qqy install build-essential wget golang sudo git squashfs-tools
+
+      - name: Fetch Singularity
+        run: |
+          export VERSION=3.6.4
+          wget -O singularity.tar.gz https://github.com/hpcng/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz
+          tar -xzf singularity.tar.gz
+        working-directory: /tmp
+
+      - name: Build Singularity
+        run: |
+          ./mconfig && make -C builddir && sudo make -C builddir install
+        working-directory: /tmp/singularity
+
+      - name: Build the image
+        run: |
+          ./make.sh
