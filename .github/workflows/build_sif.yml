@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Singularity
         run: |
-          ./mconfig && make -C builddir && sudo make -C builddir install
+          ./mconfig --without-network && make -C builddir && sudo make -C builddir install
         working-directory: /tmp/singularity
 
       - name: Build the image
