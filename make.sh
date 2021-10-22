@@ -14,6 +14,7 @@ env_activate=$top_level/.env/bin/activate
 if [ ! -f "$env_activate" ]; then
     python3 -m venv .env
     source $env_activate
+    pip3 install wheel
     pip3 install -r $top_level/requirements.txt
 else
     source $top_level/.env/bin/activate
