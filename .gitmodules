@@ -1,0 +1,3 @@
+[submodule "docker-node"]
+	path = docker-node
+	url = https://github.com/nodejs/docker-node.git
