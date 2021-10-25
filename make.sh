@@ -5,8 +5,8 @@ sudo -v
 
 # note: this will result in an erroneous value in submodules.
 top_level=$(git rev-parse --show-toplevel)
-node_version=16
-base_container=alpine3.14
+node_version=${1:-16}
+base_container=${2:-alpine3.14}
 dockerfile_dir=$top_level/docker-node/$node_version/$base_container
 sif_location=$top_level/image.sif
 env_activate=$top_level/.env/bin/activate
