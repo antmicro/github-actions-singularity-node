@@ -8,7 +8,7 @@ top_level=$(git rev-parse --show-toplevel)
 node_version=${1:-16}
 base_container=${2:-alpine3.14}
 dockerfile_dir=$top_level/docker-node/$node_version/$base_container
-sif_location=$top_level/image.sif
+sif_location=$top_level/node-$node_version-$base_container.sif
 env_activate=$top_level/.env/bin/activate
 additional_post=$top_level/additional-$node_version-$base_container.sh
 awk_include_post='$1~/[%].+/ && d==1 { system(cat_cmd); d=0; }; $0 {print}; $1=="%post" {d=1};'
