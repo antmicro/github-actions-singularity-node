@@ -1,1 +1,1 @@
-apk add --no-cache git openssh bash
+apk add --no-cache git openssh bash coreutils
