@@ -14,12 +14,12 @@ jobs:
         base_os: ['alpine3.14', 'buster-slim'] 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
 
       - name: Install dependencies
         run: |
@@ -42,7 +42,7 @@ jobs:
         run: ./make.sh 16 ${{ matrix.base_os }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: |
             **/*.sif
