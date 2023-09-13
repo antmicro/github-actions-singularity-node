@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        base_os: ['alpine3.14', 'buster-slim'] 
+        base_os: ['alpine3.18', 'bookworm-slim']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
         working-directory: /tmp/singularity
 
       - name: Build the image
-        run: ./make.sh 16 ${{ matrix.base_os }}
+        run: ./make.sh 20 ${{ matrix.base_os }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
