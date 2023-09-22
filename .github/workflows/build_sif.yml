@@ -5,6 +5,7 @@ on:
       - '**'
     tags-ignore:
       - '**'
+  workflow_call:
 
 jobs:
   build_sif:

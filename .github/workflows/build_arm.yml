@@ -1,0 +1,42 @@
+name: Build aarch64 SIF
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  workflow_call:
+
+jobs:
+  build_sif:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get -qqy update
+          sudo apt-get -qqy install qemu qemu-utils qemu-system-aarch64
+
+      - name: Prepare vm image
+        run: sudo ./prepare_vm.sh
+        working-directory: ./arm
+
+      - name: Start qemu
+        run: sudo ./qemu.sh
+        working-directory: ./arm
+
+      - name: Build sif
+        run: sudo ./build_ssh.sh 20 bookworm-slim
+        working-directory: ./arm
+
+      - name: Rename sif
+        run: mv arm/node-20-bookworm-slim.sif ./node-20-bookworm-slim-arm64.sif
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: node-20-bookworm-slim-arm64.sif
