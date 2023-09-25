@@ -1,6 +1,6 @@
 # Scripts for building a Singularity image with Node
 
-Copyright (c) 2020-2021 [Antmicro](https://www.antmicro.com)
+Copyright (c) 2020-2023 [Antmicro](https://www.antmicro.com)
 
 This repository contains the scripts that build a [Singularity](https://github.com/hpcng/singularity) image from the files used to build the official Docker image with Node.
 
