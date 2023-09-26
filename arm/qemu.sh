@@ -9,7 +9,7 @@ qemu-system-aarch64 \
     -cpu cortex-a53 \
     -smp $(nproc) \
     -m 4G \
-    -drive file=debian.qcow2 \
+    -drive file=work/debian.qcow2 \
     -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd \
     -netdev user,id=lan,hostfwd=tcp::"$SSH_PORT"-:22 \
     -device virtio-net-pci,netdev=lan \

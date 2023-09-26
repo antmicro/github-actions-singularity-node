@@ -10,16 +10,25 @@ on:
 jobs:
   build_sif:
     runs-on: ubuntu-latest
+    container:
+      image: debian:bullseye
+      options: --privileged
+      volumes:
+        - /lib/modules/:/lib/modules
+        - /dev:/dev
     steps:
+      - name: Install dependencies
+        run: |
+          apt-get -qqy update
+          apt-get -qqy install qemu qemu-utils qemu-system-aarch64 kmod nodejs git sudo wget unzip
+
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           submodules: true
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get -qqy update
-          sudo apt-get -qqy install qemu qemu-utils qemu-system-aarch64
+      - name: Add git safe directory
+        run: git config --global --add safe.directory $(pwd)
 
       - name: Prepare vm image
         run: sudo ./prepare_vm.sh
