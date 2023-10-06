@@ -1,0 +1,41 @@
+name: Release
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-x86_64:
+    name: Build x86_64
+    uses: ./.github/workflows/build_sif.yml
+
+  build-aarch64:
+    name: Build aarch64
+    uses: ./.github/workflows/build_arm.yml
+
+  tagged-release:
+    name: Release
+    needs: [build-aarch64, build-x86_64]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download x86_64 sifs
+        uses: actions/download-artifact@v3
+        with:
+          name: sif-x86_64
+          path: ./
+
+      - name: Download aarch64 sifs
+        uses: actions/download-artifact@v3
+        with:
+          name: sif-aarch64
+          path: ./
+
+      - name: Package sifs
+        run: zip -r ${GITHUB_REF##*/}.zip *.sif
+
+      - name: Release
+        uses: marvinpinto/action-automatic-releases@919008cf3f741b179569b7a6fb4d8860689ab7f0
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          files: ${GITHUB_REF##*/}.zip

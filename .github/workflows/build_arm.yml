@@ -48,4 +48,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: sif-aarch64
           path: node-20-bookworm-slim-arm64.sif
