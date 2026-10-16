@@ -11,7 +11,7 @@ jobs:
   build_sif:
     runs-on: ubuntu-latest
     container:
-      image: debian:bullseye
+      image: debian:trixie
       options: --privileged
       volumes:
         - /lib/modules/:/lib/modules
@@ -19,8 +19,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apt-get -qqy update
-          apt-get -qqy install qemu qemu-utils qemu-system-aarch64 kmod nodejs git sudo wget unzip
+          apt-get -qqy --update install qemu qemu-utils qemu-system-aarch64 kmod nodejs git sudo wget unzip
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -39,14 +38,14 @@ jobs:
         working-directory: ./arm
 
       - name: Build sif
-        run: sudo ./build_ssh.sh 20 bookworm-slim
+        run: sudo ./build_ssh.sh 24 trixie-slim
         working-directory: ./arm
 
       - name: Rename sif
-        run: mv arm/node-20-bookworm-slim.sif ./node-20-bookworm-slim-arm64.sif
+        run: mv arm/node-24-trixie-slim.sif ./node-24-trixie-slim-arm64.sif
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: sif-aarch64
-          path: node-20-bookworm-slim-arm64.sif
+          path: node-24-trixie-slim-arm64.sif

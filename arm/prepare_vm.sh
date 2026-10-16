@@ -6,7 +6,7 @@ ROOT_DIR=$(pwd)
 WORK_DIR=${ROOT_DIR}/work
 mkdir -p "$WORK_DIR"
 
-DEBIAN_URL=https://cloud.debian.org/images/cloud/bullseye/20230912-1501/debian-11-nocloud-arm64-20230912-1501.qcow2
+DEBIAN_URL=https://cloud.debian.org/images/cloud/trixie/20261001-2618/debian-13-nocloud-arm64-20261001-2618.qcow2
 VM_IMAGE=${WORK_DIR}/debian.qcow2
 
 APPTAINER_SHA=62e16f5071854226dfb0cedece557d56a81d254f

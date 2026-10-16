@@ -19,12 +19,18 @@ if [ ! -f "$env_activate" ]; then
     pip3 install wheel
     pip3 install -r $top_level/requirements.txt
 else
-    source $top_level/.venv/bin/activate
+    source $env_activate
 fi
 
 if [ ! -f "$additional_post" ]; then
     additional_post=/dev/null
 fi
+
+pushd "$top_level/docker-node"
+for patch in ../patches/*; do
+    patch --forward -p1 <"$patch" || true
+done
+popd
 
 cd $dockerfile_dir
 
