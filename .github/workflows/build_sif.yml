@@ -15,12 +15,12 @@ jobs:
         base_os: ['alpine3.24', 'trixie-slim']
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           submodules: true
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
 
       - name: Install dependencies
         run: |
@@ -43,7 +43,7 @@ jobs:
         run: ./make.sh 24 ${{ matrix.base_os }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: sif-x86_64
           path: |
