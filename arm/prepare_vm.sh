@@ -16,7 +16,7 @@ APPTAINER_DIR=${WORK_DIR}/apptainer-${APPTAINER_SHA}
 
 sudo dpkg --add-architecture arm64
 sudo apt-get -qqy update
-sudo apt-get install -qqy build-essential make gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu gcc git libc6:arm64
+sudo apt-get install -qqy build-essential make gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu gcc git libc6:arm64 qemu-user-static
 
 check_go_version() {
     GO_MINOR=19
@@ -27,16 +27,19 @@ check_go_version() {
 }
 
 ensure_go() {
-    GO_URL=https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+    GO_URL=https://go.dev/dl/go1.27.3.linux-amd64.tar.gz
     GO_TAR=${WORK_DIR}/go.tar.gz
 
-    if [ ! "$(which go)" ] || [ ! "$(check_go_version)" ]; then
-        if [ ! -d "$WORK_DIR/go" ]; then
-            test -f "$GO_TAR" || wget -qO "$GO_TAR" "$GO_URL"
-            tar -C "${WORK_DIR}" -xzf "$GO_TAR"
+    # If sufficient go is installed system-wide, we can use it
+    if [ ! -d "$WORK_DIR/go" ]; then
+        if [ "$(which go)" ] && [ "$(check_go_version)" ]; then
+            return
         fi
-        export GO="$WORK_DIR/go/bin/go"
+        test -f "$GO_TAR" || wget -qO "$GO_TAR" "$GO_URL"
+        tar -C "${WORK_DIR}" -xzf "$GO_TAR"
     fi
+
+    export GO="$WORK_DIR/go/bin/go"
 }
 
 if [ ! -f "$VM_IMAGE" ]; then
@@ -68,6 +71,10 @@ setup_nbd() {
 
 setup_nbd
 
+sudo cp "$(which qemu-aarch64-static)" "$TMP_NBD_MNTPOINT/usr/bin"
+sudo chroot "$TMP_NBD_MNTPOINT" qemu-aarch64-static /bin/bash <<EOF
+apt-get -qqy --update install openssh-server
+EOF
 sudo cp "${ROOT_DIR}/ssh.service" "$TMP_NBD_MNTPOINT/lib/systemd/system/ssh.service"
 sudo cp "${ROOT_DIR}/allow_passwordless_root.conf" "$TMP_NBD_MNTPOINT/etc/ssh/sshd_config.d"
 sudo rm -rf "$TMP_NBD_MNTPOINT/etc/udev/rules.d/*"  # Remove 75-cloud-ifupdown.rules

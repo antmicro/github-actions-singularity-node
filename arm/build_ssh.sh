@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SSH_PORT=${SSH_PORT:-2222}
-NODE_VERSION=${1:-20}
-BASE_OS=${2:-bookworm-slim}
+NODE_VERSION=${1:-24}
+BASE_OS=${2:-trixie-slim}
 
 ssh -p "$SSH_PORT" \
     -oUserKnownHostsFile=/dev/null \
