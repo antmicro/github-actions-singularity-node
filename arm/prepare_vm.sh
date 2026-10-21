@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+set -xeo pipefail
 
 ROOT_DIR=$(pwd)
 WORK_DIR=${ROOT_DIR}/work
@@ -72,9 +72,7 @@ setup_nbd() {
 setup_nbd
 
 sudo cp "$(which qemu-aarch64-static)" "$TMP_NBD_MNTPOINT/usr/bin"
-sudo chroot "$TMP_NBD_MNTPOINT" qemu-aarch64-static /bin/bash <<EOF
-apt-get -qqy --update install openssh-server
-EOF
+sudo chroot "$TMP_NBD_MNTPOINT" qemu-aarch64-static /usr/bin/apt-get -qqy --update install openssh-server
 sudo cp "${ROOT_DIR}/ssh.service" "$TMP_NBD_MNTPOINT/lib/systemd/system/ssh.service"
 sudo cp "${ROOT_DIR}/allow_passwordless_root.conf" "$TMP_NBD_MNTPOINT/etc/ssh/sshd_config.d"
 sudo rm -rf "$TMP_NBD_MNTPOINT/etc/udev/rules.d/*"  # Remove 75-cloud-ifupdown.rules
